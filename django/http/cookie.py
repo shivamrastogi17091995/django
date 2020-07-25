@@ -103,4 +103,16 @@ def parse_cookie(cookie):
     cookiedict = {}
     for key in c.keys():
         cookiedict[key] = c.get(key).value
+    try:
+        for chunk in cookie.split(';'):
+            if '=' in chunk:
+                key, val = chunk.split('=', 1)
+            else:
+                key, val = '', chunk
+            key, val = key.strip(), val.strip()
+            if key or val:
+                if not cookiedict.get(key):
+                    cookiedict[key] = val
+    except:
+        pass
     return cookiedict
