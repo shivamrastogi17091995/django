@@ -104,6 +104,8 @@ def parse_cookie(cookie):
     for key in c.keys():
         cookiedict[key] = c.get(key).value
     try:
+        if six.PY2:
+            cookie = force_str(cookie)
         for chunk in cookie.split(';'):
             if '=' in chunk:
                 key, val = chunk.split('=', 1)
@@ -112,7 +114,7 @@ def parse_cookie(cookie):
             key, val = key.strip(), val.strip()
             if key or val:
                 if not cookiedict.get(key):
-                    cookiedict[key] = val
+                    cookiedict[key] = http_cookies._unquote(val)
     except:
         pass
     return cookiedict
